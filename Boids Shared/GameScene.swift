@@ -10,7 +10,7 @@ import SpriteKit
 class GameScene: SKScene {
     
     var boidRadius: CGFloat = 1
-
+    var boids: [BoidNode] = []
     
     class func newGameScene() -> GameScene {
         // Load 'GameScene.sks' as an SKScene.
@@ -35,13 +35,18 @@ class GameScene: SKScene {
     }
 
     func makeBoid(at position: CGPoint, color: SKColor) {
+        
         let boid = BoidNode(radius: self.boidRadius)
-        boid.setupNode(color: color, position: position)
+        boid.setupNode(
+            color: color,
+            position: position,
+            heading: CGVector(dx: CGFloat.random(in: -10..<10), dy: CGFloat.random(in: -10..<10)))
+        self.boids.append(boid)
         self.addChild(boid)
     }
     
     override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
+        for boid in boids { boid.move() }
     }
 }
 
