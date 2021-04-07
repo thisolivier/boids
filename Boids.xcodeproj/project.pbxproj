@@ -22,6 +22,10 @@
 		099390D2261DF01A008FD90D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 099390A9261DF01A008FD90D /* Assets.xcassets */; };
 		099390E0261DF9C5008FD90D /* BoidNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099390DF261DF9C5008FD90D /* BoidNode.swift */; };
 		099390E1261DF9C5008FD90D /* BoidNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099390DF261DF9C5008FD90D /* BoidNode.swift */; };
+		099390E7261E2916008FD90D /* Vector+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099390E6261E2916008FD90D /* Vector+Extensions.swift */; };
+		099390E8261E2916008FD90D /* Vector+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099390E6261E2916008FD90D /* Vector+Extensions.swift */; };
+		099390EC261E411B008FD90D /* RelativePositionsLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099390EB261E411B008FD90D /* RelativePositionsLibrary.swift */; };
+		099390ED261E411B008FD90D /* RelativePositionsLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099390EB261E411B008FD90D /* RelativePositionsLibrary.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +45,8 @@
 		099390C9261DF01A008FD90D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		099390CA261DF01A008FD90D /* Boids_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Boids_macOS.entitlements; sourceTree = "<group>"; };
 		099390DF261DF9C5008FD90D /* BoidNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoidNode.swift; sourceTree = "<group>"; };
+		099390E6261E2916008FD90D /* Vector+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vector+Extensions.swift"; sourceTree = "<group>"; };
+		099390EB261E411B008FD90D /* RelativePositionsLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelativePositionsLibrary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +83,8 @@
 				099390A7261DF019008FD90D /* GameScene.sks */,
 				099390A8261DF019008FD90D /* GameScene.swift */,
 				099390DF261DF9C5008FD90D /* BoidNode.swift */,
+				099390E6261E2916008FD90D /* Vector+Extensions.swift */,
+				099390EB261E411B008FD90D /* RelativePositionsLibrary.swift */,
 				099390A9261DF01A008FD90D /* Assets.xcassets */,
 			);
 			path = "Boids Shared";
@@ -219,7 +227,9 @@
 			files = (
 				099390CF261DF01A008FD90D /* GameScene.swift in Sources */,
 				099390B4261DF01A008FD90D /* GameViewController.swift in Sources */,
+				099390EC261E411B008FD90D /* RelativePositionsLibrary.swift in Sources */,
 				099390B2261DF01A008FD90D /* AppDelegate.swift in Sources */,
+				099390E7261E2916008FD90D /* Vector+Extensions.swift in Sources */,
 				099390E0261DF9C5008FD90D /* BoidNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -230,7 +240,9 @@
 			files = (
 				099390D0261DF01A008FD90D /* GameScene.swift in Sources */,
 				099390C5261DF01A008FD90D /* GameViewController.swift in Sources */,
+				099390ED261E411B008FD90D /* RelativePositionsLibrary.swift in Sources */,
 				099390C3261DF01A008FD90D /* AppDelegate.swift in Sources */,
+				099390E8261E2916008FD90D /* Vector+Extensions.swift in Sources */,
 				099390E1261DF9C5008FD90D /* BoidNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

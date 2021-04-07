@@ -13,20 +13,17 @@ class GameScene: SKScene {
     var boids: [BoidNode] = []
     
     class func newGameScene() -> GameScene {
-        // Load 'GameScene.sks' as an SKScene.
         guard let scene = SKScene(fileNamed: "GameScene") as? GameScene else {
             print("Failed to load GameScene.sks")
             abort()
         }
         
-        // Set the scale mode to scale to fit the window
         scene.scaleMode = .aspectFill
         scene.backgroundColor = .highlightColor
         return scene
     }
     
     func setUpScene() {
-        // Create shape node to use during generative interactions
         boidRadius = (self.size.width + self.size.height) * 0.001
     }
     
@@ -35,18 +32,19 @@ class GameScene: SKScene {
     }
 
     func makeBoid(at position: CGPoint, color: SKColor) {
-        
-        let boid = BoidNode(radius: self.boidRadius)
+        let boid = BoidNode(
+            radius: self.boidRadius,
+            gameSize: self.scene?.size ?? .zero)
         boid.setupNode(
             color: color,
             position: position,
-            heading: CGVector(dx: CGFloat.random(in: -10..<10), dy: CGFloat.random(in: -10..<10)))
+            heading: CGVector(dx: CGFloat.random(in: -5..<5), dy: CGFloat.random(in: -5..<5)))
         self.boids.append(boid)
         self.addChild(boid)
     }
     
     override func update(_ currentTime: TimeInterval) {
-        for boid in boids { boid.move() }
+        for boid in boids { boid.move(in: self.boids) }
     }
 }
 
