@@ -9,11 +9,11 @@ import SpriteKit
 
 class BoidNode: SKSpriteNode {
     
-    public init(size: CGFloat) {
+    public init(radius: CGFloat) {
         super.init(
             texture: nil,
             color: SKColor.clear,
-            size: CGSize())
+            size: CGSize(width: radius, height: radius))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -24,7 +24,7 @@ class BoidNode: SKSpriteNode {
     
     func setupNode(color: SKColor, position: CGPoint) {
         let circle = SKShapeNode(circleOfRadius: self.size.width)
-        circle.fillColor = color
+        circle.strokeColor = color
         circle.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         self.addChild(circle)
         self.position = position

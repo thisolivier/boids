@@ -35,7 +35,7 @@ class GameScene: SKScene {
     }
 
     func makeBoid(at position: CGPoint, color: SKColor) {
-        let boid = BoidNode(size: self.boidRadius)
+        let boid = BoidNode(radius: self.boidRadius)
         boid.setupNode(color: color, position: position)
         self.addChild(boid)
     }
