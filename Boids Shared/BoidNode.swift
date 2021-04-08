@@ -19,13 +19,13 @@ class BoidNode: SKSpriteNode {
     var velocity: CGVector = .init(dx: 10.0, dy: 10.0)
     var xRange: CGFloatRange = 0...0
     var yRange: CGFloatRange = 0...0
-    var speedLimit: CGFloat = 9
+    var speedLimit: CGFloat = 8
     
     var depthOfVision: CGFloat = 40
-    var fieldOfVision: CGFloat = 2
+    var fieldOfVision: CGFloat = 3
     var avoidanceIntensity: CGFloat = 0.7
     var attractionIntensity: CGFloat = 0.007
-    var alignmentIntensity: CGFloat = 0.8
+    var alignmentIntensity: CGFloat = 0.5
     
     
     public init(radius: CGFloat, gameSize: CGSize) {
@@ -75,17 +75,14 @@ class BoidNode: SKSpriteNode {
         
         
         let speedLimitedVelocity = Self.applySpeedLimit(to: avoidNeighboursVector, limit: speedLimit)
-        let boundariedVelocity = Self.updateVelocityToAvoidBounds(
-            currentPositon: self.position,
-            oldVelocity: speedLimitedVelocity,
+        let newPosition = Self.updatePositionToAvoidBounds(
+            currentPositon: CGPoint(
+                x: self.position.x + speedLimitedVelocity.dx,
+                y: self.position.y + speedLimitedVelocity.dy),
             xRange: self.xRange,
             yRange: self.yRange)
-        
-        
-        self.position = CGPoint(
-            x: self.position.x + boundariedVelocity.dx,
-            y: self.position.y + boundariedVelocity.dy)
-        self.velocity = boundariedVelocity
+        self.position = newPosition
+        self.velocity = speedLimitedVelocity
     }
     
     func findNeighbours(
@@ -184,23 +181,17 @@ class BoidNode: SKSpriteNode {
             dy: oldVelocity.dy - normalisedResultantVector.dy)
     }
     
-    static func updateVelocityToAvoidBounds(currentPositon: CGPoint, oldVelocity: CGVector, xRange: CGFloatRange, yRange: CGFloatRange) -> CGVector {
-        let newX = currentPositon.x + oldVelocity.dx * 3
-        let newY = currentPositon.y + oldVelocity.dy * 3
-        var newVelocity: CGVector?
-        
-        switch(!xRange.contains(newX), !yRange.contains(newY)) {
+    static func updatePositionToAvoidBounds(currentPositon: CGPoint, xRange: CGFloatRange, yRange: CGFloatRange) -> CGPoint {
+        switch(!xRange.contains(currentPositon.x), !yRange.contains(currentPositon.y)) {
         case (true, true):
-            newVelocity = CGVector(dx: oldVelocity.dx * -3, dy: oldVelocity.dy * -3)
+            return CGPoint(x: currentPositon.x * -1, y: currentPositon.y * -1)
         case (true, false):
-            newVelocity = CGVector(dx: oldVelocity.dx * -3, dy: oldVelocity.dy)
+            return CGPoint(x: currentPositon.x * -1, y: currentPositon.y)
         case(false, true):
-            newVelocity = CGVector(dx: oldVelocity.dx, dy: oldVelocity.dy * -3)
+            return CGPoint(x: currentPositon.x, y: currentPositon.y * -1)
         case (false, false):
-            break
+            return currentPositon
         }
-        
-        return newVelocity ?? oldVelocity
     }
     
     static func applySpeedLimit(to velocity: CGVector, limit: CGFloat) -> CGVector {

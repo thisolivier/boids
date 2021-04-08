@@ -54,13 +54,13 @@ extension GameScene {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
-            self.makeBoid(at: t.location(in: self), color: SKColor.green)
+            self.makeBoid(at: t.location(in: self), color: SKColor.systemPink)
         }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
-            self.makeBoid(at: t.location(in: self), color: SKColor.blue)
+            self.makeBoid(at: t.location(in: self), color: SKColor.black)
         }
     }
     
@@ -72,7 +72,7 @@ extension GameScene {
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
-            self.makeBoid(at: t.location(in: self), color: SKColor.red)
+            self.makeBoid(at: t.location(in: self), color: SKColor.orange)
         }
     }
     
@@ -85,15 +85,15 @@ extension GameScene {
 extension GameScene {
 
     override func mouseDown(with event: NSEvent) {
-        self.makeBoid(at: event.location(in: self), color: SKColor.green)
+        self.makeBoid(at: event.location(in: self), color: SKColor.systemPink)
     }
     
     override func mouseDragged(with event: NSEvent) {
-        self.makeBoid(at: event.location(in: self), color: SKColor.blue)
+        self.makeBoid(at: event.location(in: self), color: SKColor.black)
     }
     
     override func mouseUp(with event: NSEvent) {
-        self.makeBoid(at: event.location(in: self), color: SKColor.red)
+        self.makeBoid(at: event.location(in: self), color: SKColor.orange)
     }
 
 }
