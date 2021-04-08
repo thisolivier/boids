@@ -9,8 +9,11 @@ import SpriteKit
 
 class GameScene: SKScene {
     
-    var boidRadius: CGFloat = 1
+    var boidRadius: CGFloat = 10
     var boids: [BoidNode] = []
+    private var lastUpdateTime: TimeInterval = 0
+    private var frameCount: Int = 0
+    private let updateFrequency = 31
     
     class func newGameScene() -> GameScene {
         guard let scene = SKScene(fileNamed: "GameScene") as? GameScene else {
@@ -19,12 +22,12 @@ class GameScene: SKScene {
         }
         
         scene.scaleMode = .aspectFill
-        scene.backgroundColor = .highlightColor
+        scene.backgroundColor = .black
         return scene
     }
     
     func setUpScene() {
-        boidRadius = (self.size.width + self.size.height) * 0.001
+        boidRadius = (self.size.width + self.size.height) * 0.005
     }
     
     override func didMove(to view: SKView) {
@@ -44,7 +47,9 @@ class GameScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        for boid in boids { boid.move(in: self.boids) }
+        DispatchQueue.global(qos: .background).async {
+            for boid in self.boids { boid.move(in: self.boids) }
+        }
     }
 }
 
@@ -60,7 +65,7 @@ extension GameScene {
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
-            self.makeBoid(at: t.location(in: self), color: SKColor.black)
+            self.makeBoid(at: t.location(in: self), color: SKColor.white)
         }
     }
     
@@ -89,7 +94,7 @@ extension GameScene {
     }
     
     override func mouseDragged(with event: NSEvent) {
-        self.makeBoid(at: event.location(in: self), color: SKColor.black)
+        self.makeBoid(at: event.location(in: self), color: SKColor.white)
     }
     
     override func mouseUp(with event: NSEvent) {

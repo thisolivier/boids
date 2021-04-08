@@ -21,11 +21,12 @@ class BoidNode: SKSpriteNode {
     var yRange: CGFloatRange = 0...0
     var speedLimit: CGFloat = 8
     
-    var depthOfVision: CGFloat = 40
-    var fieldOfVision: CGFloat = 3
-    var avoidanceIntensity: CGFloat = 0.7
-    var attractionIntensity: CGFloat = 0.007
-    var alignmentIntensity: CGFloat = 0.5
+    var depthOfVision: CGFloat = 70
+    var fieldOfVision: CGFloat = 1.6
+    var avoidanceIntensity: CGFloat = 0.6
+    var attractionIntensity: CGFloat = 0.003
+    var alignmentIntensity: CGFloat = 0.09
+    var avoidanceRange: CGFloat = 2
     
     
     public init(radius: CGFloat, gameSize: CGSize) {
@@ -44,11 +45,19 @@ class BoidNode: SKSpriteNode {
     }
     
     func setupNode(color: SKColor, position: CGPoint, heading: CGVector) {
-        let circle = SKShapeNode(circleOfRadius: self.size.width)
+        let circle = SKShapeNode(circleOfRadius: self.size.width/2)
         circle.strokeColor = color
         circle.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
-        self.velocity = heading
         self.addChild(circle)
+        let headingNode = SKShapeNode(rect: CGRect(
+                                        x: (self.size.width/2 - 2),
+                                        y: self.size.height/2,
+                                        width: 4,
+                                        height: depthOfVision))
+        headingNode.strokeColor = .yellow
+        self.addChild(headingNode)
+        self.velocity = heading
+        
         self.position = position
     }
     
@@ -71,7 +80,8 @@ class BoidNode: SKSpriteNode {
             neighbours,
             oldVelocity: flyTowardsNeighours,
             depthOfVision: self.depthOfVision,
-            avoidanceIntensity: avoidanceIntensity)
+            avoidanceIntensity: avoidanceIntensity,
+            avoidanceRange: self.avoidanceRange)
         
         
         let speedLimitedVelocity = Self.applySpeedLimit(to: avoidNeighboursVector, limit: speedLimit)
@@ -81,8 +91,13 @@ class BoidNode: SKSpriteNode {
                 y: self.position.y + speedLimitedVelocity.dy),
             xRange: self.xRange,
             yRange: self.yRange)
-        self.position = newPosition
-        self.velocity = speedLimitedVelocity
+        DispatchQueue.global(qos: .userInteractive).async {
+            self.position = newPosition
+            self.velocity = speedLimitedVelocity
+            self.zRotation = RelativePositions.angleOffset(
+                heading: CGVector(dx: 0, dy: 1),
+                alien: speedLimitedVelocity)
+        }
     }
     
     func findNeighbours(
@@ -121,10 +136,13 @@ class BoidNode: SKSpriteNode {
                 let yValue = nextElement.boid.velocity.dy + resultVector.dy
                 return CGVector(dx: xValue, dy: yValue)
             })
+        let normalisedTotalNeighbourVelocity = CGVector(
+            dx: totalNeighbourVelocity.dx / totalNeighbourVelocity.length,
+            dy: totalNeighbourVelocity.dy / totalNeighbourVelocity.length)
         let aligmentIntensityAdjustedDenominator = 1 + (1 * aligmentIntensity)
         return CGVector(
-            dx: (((totalNeighbourVelocity.dx/CGFloat(neighbours.count)) * aligmentIntensity) + oldVelocity.dx) / aligmentIntensityAdjustedDenominator,
-            dy: (((totalNeighbourVelocity.dy/CGFloat(neighbours.count)) * aligmentIntensity) + oldVelocity.dy) / aligmentIntensityAdjustedDenominator)
+            dx: ((normalisedTotalNeighbourVelocity.dx * aligmentIntensity) + oldVelocity.dx) / aligmentIntensityAdjustedDenominator,
+            dy: ((normalisedTotalNeighbourVelocity.dy * aligmentIntensity) + oldVelocity.dy) / aligmentIntensityAdjustedDenominator)
         
     }
     
@@ -156,14 +174,15 @@ class BoidNode: SKSpriteNode {
         _ neighbours: [BoidNeighbour],
         oldVelocity: CGVector,
         depthOfVision: CGFloat,
-        avoidanceIntensity: CGFloat
+        avoidanceIntensity: CGFloat,
+        avoidanceRange: CGFloat
     ) -> CGVector {
-        let dangerouslyClose = neighbours.filter { $0.distance < (depthOfVision * 0.5) }
-        guard !dangerouslyClose.isEmpty else {
+        let neighbours = neighbours.filter { $0.distance < depthOfVision / avoidanceRange }
+        guard !neighbours.isEmpty else {
             return oldVelocity
         }
-        let count: CGFloat = CGFloat(dangerouslyClose.count)
-        let resultantVector: CGVector = dangerouslyClose
+        let count: CGFloat = CGFloat(neighbours.count)
+        let resultantVector: CGVector = neighbours
             .map { CGVector(
                 dx: $0.relativePosition.dx / $0.distance,
                 dy: $0.relativePosition.dy / $0.distance)}
@@ -200,7 +219,7 @@ class BoidNode: SKSpriteNode {
             let ratio = limit / length
             return CGVector(dx: velocity.dx * ratio, dy: velocity.dy * ratio)
         } else {
-            return velocity
+            return CGVector(dx: velocity.dx * 1.03, dy: velocity.dy * 1.03)
         }
     }
 }
