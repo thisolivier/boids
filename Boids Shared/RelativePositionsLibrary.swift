@@ -8,6 +8,8 @@
 import SceneKit
 
 enum RelativePositions {
+    
+    /// Can only cope with positive numbers, FIX THIS
     static func angleOffset(heading: CGVector, alien: CGVector) -> CGFloat {
         let headingAngle = atan2(heading.dx, heading.dy)
         let alienAngle = atan2(alien.dx, alien.dy)

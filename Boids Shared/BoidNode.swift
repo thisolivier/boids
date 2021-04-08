@@ -22,7 +22,7 @@ class BoidNode: SKSpriteNode {
     var speedLimit: CGFloat = 8
     
     var depthOfVision: CGFloat = 40
-    var fieldOfVision: CGFloat = 3
+    var fieldOfVision: CGFloat = 4.5
     var avoidanceIntensity: CGFloat = 0.7
     var attractionIntensity: CGFloat = 0.007
     var alignmentIntensity: CGFloat = 0.5
@@ -47,8 +47,15 @@ class BoidNode: SKSpriteNode {
         let circle = SKShapeNode(circleOfRadius: self.size.width)
         circle.strokeColor = color
         circle.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
-        self.velocity = heading
         self.addChild(circle)
+        let nose = SKShapeNode(rect: CGRect(
+                                x: self.size.width/2 - 1,
+                                y: self.size.height/2,
+                                width: 2,
+                                height: self.depthOfVision))
+        nose.strokeColor = .brown
+        self.addChild(nose)
+        self.velocity = heading
         self.position = position
     }
     
@@ -83,6 +90,7 @@ class BoidNode: SKSpriteNode {
             yRange: self.yRange)
         self.position = newPosition
         self.velocity = speedLimitedVelocity
+        self.zRotation = RelativePositions.angleOffset(heading: CGVector(dx: 0, dy: 1), alien: speedLimitedVelocity)
     }
     
     func findNeighbours(
@@ -106,7 +114,7 @@ class BoidNode: SKSpriteNode {
                     boid: $0)
             }
             .filter { $0.distance < depthOfVision }
-            .filter { abs($0.deviationFromHeading) < fieldOfVision }
+            .filter { abs($0.deviationFromHeading) < fieldOfVision/2 }
     }
     
     static func updateHeadingToMatchNeighbours(
