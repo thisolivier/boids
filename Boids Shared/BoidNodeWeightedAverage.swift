@@ -17,30 +17,63 @@ import SpriteKit
 //    var neighbourHeadingWeight: Float
 //}
 
-class BoidNodeWeightedAverage: SKSpriteNode {
+// Boundary conditions
+// - Can dissapear off the edge & reappaear on the next
+// - Can bounce of the edge
+// Usually the update rules will need to know about the boundary conditions to calculate accurate distance to the neibours, so it needs to be know in the update..
 
-    var forceAccumulatorMatching: CGPoint = .zero
-    var weightAccumulatorMatching: Float = 0
+enum WorldProperties {
+    static let matchingDistance: CGFloat = 40
+    static let avoidanceDistance: CGFloat = 20
+    static let centerOfMassDiatance: CGFloat = 50
+}
 
-    var forceAccumulatorAvoidance: CGPoint = .zero
-    var weightAccumulatorAvoidance: Float = 0
+class BoidNodeWeightedAverage: SKSpriteNode, BoidNodeProtocol {
 
-    var forceAccumulatorCenterOfMass: CGPoint = .zero
-    var weightAccumulatorCenterOfMass: Float = 0
-
-    var positionOfBoid: CGPoint
     var velocity: CGPoint
 
     public init(position: CGPoint) {
-        self.positionOfBoid = position
         self.velocity = .zero
         super.init(
             texture: nil,
             color: SKColor.black,
             size: CGSize(width: 5, height: 5))
+        self.position = position
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func update(in flock: [BoidNodeProtocol]) {
+        var forceAccumulatorMatching: CGPoint = .zero
+        var weightAccumulatorMatching: Float = 0
+
+        var forceAccumulatorAvoidance: CGPoint = .zero
+        var weightAccumulatorAvoidance: Float = 0
+
+        var forceAccumulatorCenterOfMass: CGPoint = .zero
+        var weightAccumulatorCenterOfMass: Float = 0
+
+        // loop and accumulate all the matching logic
+        for neighbour in flock {
+            let distanceToNeighbour: CGFloat = 3.0
+            if distanceToNeighbour < WorldProperties.matchingDistance {
+                // Add to the force accumulator
+                // Incriment the weight accumulator
+            }
+        }
+
+        // ditto for avoidance
+
+        // ditto for force
+
+        // Compute weighted average for 3 propeties
+
+        // Equations of motion (update my velocity, then update my position).
+            // We need to have some intertia for the boids, otherwise we can't use F = MA
+            // We need to calulate the acceleration, which relies on the force (from the rules) and the mass (intertia) of the boid.
+            // We will then calculate a new velocity which is old velocity + acceleration * time step
+            // If you ignore the time step, you implicity set it to 1. It should be a constant.
     }
 }

@@ -8,7 +8,9 @@
 import SpriteKit
 
 protocol BoidNodeProtocol: SKSpriteNode {
-    func move(in flock: [BoidNode])
+    var velocity: CGPoint { get }
+    
+    func update(in flock: [BoidNodeProtocol])
 }
 
 // Three core models for the world

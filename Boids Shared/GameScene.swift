@@ -10,7 +10,7 @@ import SpriteKit
 class GameScene: SKScene {
     
     var boidRadius: CGFloat = 1
-    var boids: [BoidNode] = []
+    var boids: [BoidNodeProtocol] = []
     
     class func newGameScene() -> GameScene {
         guard let scene = SKScene(fileNamed: "GameScene") as? GameScene else {
@@ -24,27 +24,30 @@ class GameScene: SKScene {
     }
     
     func setUpScene() {
-        boidRadius = (self.size.width + self.size.height) * 0.001
+        // boidRadius = (self.size.width + self.size.height) * 0.001
     }
     
     override func didMove(to view: SKView) {
-        self.setUpScene()
+        // self.setUpScene()
     }
 
     func makeBoid(at position: CGPoint, color: SKColor) {
-        let boid = BoidNode(
-            radius: self.boidRadius,
-            gameSize: self.scene?.size ?? .zero)
-        boid.setupNode(
-            color: color,
-            position: position,
-            heading: CGVector(dx: CGFloat.random(in: -5..<5), dy: CGFloat.random(in: -5..<5)))
+        let boid = BoidNodeWeightedAverage(position: position)
         self.boids.append(boid)
         self.addChild(boid)
+//        let boid = BoidNode(
+//            radius: self.boidRadius,
+//            gameSize: self.scene?.size ?? .zero)
+//        boid.setupNode(
+//            color: color,
+//            position: position,
+//            heading: CGVector(dx: CGFloat.random(in: -5..<5), dy: CGFloat.random(in: -5..<5)))
+//        self.boids.append(boid)
+//        self.addChild(boid)
     }
     
     override func update(_ currentTime: TimeInterval) {
-        for boid in boids { boid.move(in: self.boids) }
+        for boid in boids { boid.update(in: self.boids) }
     }
 }
 
