@@ -16,4 +16,3 @@ enum RelativePositions {
         return (headingAngle - alienAngle).truncatingRemainder(dividingBy: CGFloat.pi)
     }
 }
-

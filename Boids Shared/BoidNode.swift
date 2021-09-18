@@ -27,7 +27,6 @@ class BoidNode: SKSpriteNode {
     var attractionIntensity: CGFloat = 0.007
     var alignmentIntensity: CGFloat = 0.5
     
-    
     public init(radius: CGFloat, gameSize: CGSize) {
         super.init(
             texture: nil,
@@ -97,7 +96,7 @@ class BoidNode: SKSpriteNode {
         in flock: [BoidNode],
         velocity: CGVector,
         currentPosition: CGPoint
-    ) -> [BoidNeighbour] {
+    ) -> [BoidNeighbour] { // Instead of a function which calcualtes the neighbours, you have one which searches through the neibours, and when it finds matches it does the operation directly.
         return flock
             .filter { $0 != self }
             .map {
@@ -105,7 +104,7 @@ class BoidNode: SKSpriteNode {
                     dx: $0.position.x - currentPosition.x,
                     dy: $0.position.y - currentPosition.y)
                 let headingOfNeighbour = RelativePositions.angleOffset(
-                    heading: velocity,
+                    heading: velocity, // Finding your neighbours shouldn't depend on heading of the neighbour at all. Mixing model layers here!
                     alien: vectorToNeighbour)
                 return BoidNeighbour(
                     relativePosition: vectorToNeighbour,
@@ -133,7 +132,6 @@ class BoidNode: SKSpriteNode {
         return CGVector(
             dx: (((totalNeighbourVelocity.dx/CGFloat(neighbours.count)) * aligmentIntensity) + oldVelocity.dx) / aligmentIntensityAdjustedDenominator,
             dy: (((totalNeighbourVelocity.dy/CGFloat(neighbours.count)) * aligmentIntensity) + oldVelocity.dy) / aligmentIntensityAdjustedDenominator)
-        
     }
     
     static func updateVelocityToFlyTowardNeighbours(

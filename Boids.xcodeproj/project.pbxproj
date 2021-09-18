@@ -26,6 +26,10 @@
 		099390E8261E2916008FD90D /* Vector+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099390E6261E2916008FD90D /* Vector+Extensions.swift */; };
 		099390EC261E411B008FD90D /* RelativePositionsLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099390EB261E411B008FD90D /* RelativePositionsLibrary.swift */; };
 		099390ED261E411B008FD90D /* RelativePositionsLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099390EB261E411B008FD90D /* RelativePositionsLibrary.swift */; };
+		09E179C526F6334A00D70348 /* BoidNodeWeightedAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E179C426F6334A00D70348 /* BoidNodeWeightedAverage.swift */; };
+		09E179C626F6334A00D70348 /* BoidNodeWeightedAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E179C426F6334A00D70348 /* BoidNodeWeightedAverage.swift */; };
+		09E179C826F633A100D70348 /* BoidNodeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E179C726F633A100D70348 /* BoidNodeProtocol.swift */; };
+		09E179C926F633A100D70348 /* BoidNodeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E179C726F633A100D70348 /* BoidNodeProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +51,8 @@
 		099390DF261DF9C5008FD90D /* BoidNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoidNode.swift; sourceTree = "<group>"; };
 		099390E6261E2916008FD90D /* Vector+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vector+Extensions.swift"; sourceTree = "<group>"; };
 		099390EB261E411B008FD90D /* RelativePositionsLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelativePositionsLibrary.swift; sourceTree = "<group>"; };
+		09E179C426F6334A00D70348 /* BoidNodeWeightedAverage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoidNodeWeightedAverage.swift; sourceTree = "<group>"; };
+		09E179C726F633A100D70348 /* BoidNodeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoidNodeProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,7 +88,9 @@
 			children = (
 				099390A7261DF019008FD90D /* GameScene.sks */,
 				099390A8261DF019008FD90D /* GameScene.swift */,
+				09E179C726F633A100D70348 /* BoidNodeProtocol.swift */,
 				099390DF261DF9C5008FD90D /* BoidNode.swift */,
+				09E179C426F6334A00D70348 /* BoidNodeWeightedAverage.swift */,
 				099390E6261E2916008FD90D /* Vector+Extensions.swift */,
 				099390EB261E411B008FD90D /* RelativePositionsLibrary.swift */,
 				099390A9261DF01A008FD90D /* Assets.xcassets */,
@@ -231,6 +239,8 @@
 				099390B2261DF01A008FD90D /* AppDelegate.swift in Sources */,
 				099390E7261E2916008FD90D /* Vector+Extensions.swift in Sources */,
 				099390E0261DF9C5008FD90D /* BoidNode.swift in Sources */,
+				09E179C526F6334A00D70348 /* BoidNodeWeightedAverage.swift in Sources */,
+				09E179C826F633A100D70348 /* BoidNodeProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,6 +254,8 @@
 				099390C3261DF01A008FD90D /* AppDelegate.swift in Sources */,
 				099390E8261E2916008FD90D /* Vector+Extensions.swift in Sources */,
 				099390E1261DF9C5008FD90D /* BoidNode.swift in Sources */,
+				09E179C626F6334A00D70348 /* BoidNodeWeightedAverage.swift in Sources */,
+				09E179C926F633A100D70348 /* BoidNodeProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
