@@ -24,10 +24,10 @@ import SpriteKit
 
 enum WorldProperties {
     static let matchingDistance: CGFloat = 40
-    static let avoidanceDistance: CGFloat = 30
-    static let centerOfMassDiatance: CGFloat = 20
-    static let boidInertia: CGFloat = 14
-    static let speedLimit: CGFloat = 2
+    static let avoidanceDistance: CGFloat = 20
+    static let centerOfMassDiatance: CGFloat = 30
+    static let boidInertia: CGFloat = 2
+    static let speedLimit: CGFloat = 6
 }
 
 class BoidNodeWeightedAverage: SKSpriteNode, BoidNodeProtocol {
@@ -35,7 +35,7 @@ class BoidNodeWeightedAverage: SKSpriteNode, BoidNodeProtocol {
     var velocity: CGPoint
 
     public init(position: CGPoint) {
-        self.velocity = .init(x: 5, y: 5)
+        self.velocity = .init(x: CGFloat.random(in: -5...5), y: CGFloat.random(in: -5...5))
         super.init(
             texture: nil,
             color: SKColor.black,
@@ -64,27 +64,26 @@ class BoidNodeWeightedAverage: SKSpriteNode, BoidNodeProtocol {
                 self.position,
                 and: neighbour.position)
             if distanceToNeighbour < WorldProperties.matchingDistance {
-                // this euqation is wrong, we want the normalised velocity
-                let normalised =
                 forceAccumulatorMatching = .init(
-                    x: forceAccumulatorMatching.x + neighbour.velocity.x,
-                    y: forceAccumulatorMatching.y + neighbour.velocity.y)
+                    x: forceAccumulatorMatching.x + neighbour.velocity.normalisedVector.x,
+                    y: forceAccumulatorMatching.y + neighbour.velocity.normalisedVector.y)
                 weightAccumulatorMatching += 1
             }
 
             // ditto for avoidance
+            // avoidance needs to be wighted based on how close they are
             if distanceToNeighbour < WorldProperties.avoidanceDistance {
                 forceAccumulatorAvoidance = .init(
-                    x: forceAccumulatorAvoidance.x + neighbour.velocity.x,
-                    y: forceAccumulatorAvoidance.y + neighbour.velocity.y)
-                weightAccumulatorAvoidance += 1
+                    x: forceAccumulatorAvoidance.x + neighbour.velocity.normalisedVector.x,
+                    y: forceAccumulatorAvoidance.y + neighbour.velocity.normalisedVector.y)
+                weightAccumulatorAvoidance += 4
             }
 
             // ditto for force
             if distanceToNeighbour < WorldProperties.centerOfMassDiatance {
                 let relativeHeading = CGPoint(
                     x: neighbour.position.x - position.x,
-                    y: neighbour.position.y - position.y)
+                    y: neighbour.position.y - position.y).normalisedVector
                 forceAccumulatorCenterOfMass = .init(
                     x: forceAccumulatorCenterOfMass.x + relativeHeading.x,
                     y: forceAccumulatorCenterOfMass.y + relativeHeading.y)
@@ -93,7 +92,7 @@ class BoidNodeWeightedAverage: SKSpriteNode, BoidNodeProtocol {
         }
 
         // Compute weighted average for 3 propeties
-        let combinedForce = (forceAccumulatorMatching * weightAccumulatorMatching) + (forceAccumulatorAvoidance * weightAccumulatorAvoidance * -1) + (forceAccumulatorCenterOfMass * weightAccumulatorCenterOfMass)
+        let combinedForce = (forceAccumulatorMatching * weightAccumulatorMatching) + (forceAccumulatorCenterOfMass * weightAccumulatorCenterOfMass) + (forceAccumulatorAvoidance * weightAccumulatorAvoidance * -1)
         let combinedWeights = (weightAccumulatorMatching + weightAccumulatorAvoidance + weightAccumulatorCenterOfMass)
         let weightedAverage = combinedForce / combinedWeights
 
@@ -101,6 +100,7 @@ class BoidNodeWeightedAverage: SKSpriteNode, BoidNodeProtocol {
             // We need to have some intertia for the boids, otherwise we can't use F = MA (or A = F/M)
             // We need to calulate the acceleration, which relies on the force (from the rules) and the mass (intertia) of the boid.
         let acceleration = weightedAverage / WorldProperties.boidInertia
+        // velocity = velocity + acceleration
         velocity = Self.applySpeedLimit(to: velocity + acceleration, limit: WorldProperties.speedLimit)
             // We will then calculate a new velocity which is old velocity + (acceleration * time step)
             // If you ignore the time step, you implicity set it to 1. It should be a constant.

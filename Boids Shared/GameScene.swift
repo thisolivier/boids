@@ -29,8 +29,8 @@ class GameScene: SKScene {
 
     override func didMove(to view: SKView) {
         super.didMove(to: view)
-        let halfWidth = scene?.size.width ?? 0 / 2
-        let halfHeight = scene?.size.height ?? 0 / 2
+        let halfWidth = scene?.size.width ?? 0 / 3
+        let halfHeight = scene?.size.height ?? 0 / 3
         self.xRange = (halfWidth * -1)...halfWidth
         self.yRange = (halfHeight * -1)...halfHeight
     }
@@ -50,12 +50,12 @@ class GameScene: SKScene {
 
     func updatePositionToAvoidBounds(currentPositon: CGPoint) -> CGPoint {
         switch(!xRange.contains(currentPositon.x), !yRange.contains(currentPositon.y)) {
-        case (true, true):
-            return CGPoint(x: currentPositon.x * -1, y: currentPositon.y * -1)
         case (true, false):
-            return CGPoint(x: currentPositon.x * -1, y: currentPositon.y)
+            return CGPoint(x: (currentPositon.x * -1) * 0.2, y: currentPositon.y)
         case(false, true):
-            return CGPoint(x: currentPositon.x, y: currentPositon.y * -1)
+            return CGPoint(x: currentPositon.x, y: (currentPositon.y * -1) * 0.2)
+        case (true, true):
+            return CGPoint(x: (currentPositon.x * -1) * 0.2, y: (currentPositon.y * -1) * 0.2)
         case (false, false):
             return currentPositon
         }

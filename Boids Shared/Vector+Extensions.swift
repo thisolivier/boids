@@ -15,7 +15,11 @@ extension CGVector {
 
 extension CGPoint {
     var length: CGFloat {
-        return ((self.x * self.y) + (self.x * self.y)).squareRoot()
+        return ((self.x * self.x) + (self.y * self.y)).squareRoot()
+    }
+
+    var normalisedVector: CGPoint {
+        return .init(x: self.x / self.length, y: self.y / self.length)
     }
 
     static func distanceBetween(_ first: CGPoint, and second: CGPoint) -> CGFloat {
