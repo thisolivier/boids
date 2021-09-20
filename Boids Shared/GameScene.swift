@@ -8,9 +8,13 @@
 import SpriteKit
 
 class GameScene: SKScene {
+
+    typealias CGFloatRange = ClosedRange<CGFloat>
     
     var boidRadius: CGFloat = 1
     var boids: [BoidNodeProtocol] = []
+    var xRange: CGFloatRange = 0...0
+    var yRange: CGFloatRange = 0...0
     
     class func newGameScene() -> GameScene {
         guard let scene = SKScene(fileNamed: "GameScene") as? GameScene else {
@@ -22,32 +26,39 @@ class GameScene: SKScene {
         scene.backgroundColor = .highlightColor
         return scene
     }
-    
-    func setUpScene() {
-        // boidRadius = (self.size.width + self.size.height) * 0.001
-    }
-    
+
     override func didMove(to view: SKView) {
-        // self.setUpScene()
+        super.didMove(to: view)
+        let halfWidth = scene?.size.width ?? 0 / 2
+        let halfHeight = scene?.size.height ?? 0 / 2
+        self.xRange = (halfWidth * -1)...halfWidth
+        self.yRange = (halfHeight * -1)...halfHeight
     }
 
     func makeBoid(at position: CGPoint, color: SKColor) {
         let boid = BoidNodeWeightedAverage(position: position)
         self.boids.append(boid)
         self.addChild(boid)
-//        let boid = BoidNode(
-//            radius: self.boidRadius,
-//            gameSize: self.scene?.size ?? .zero)
-//        boid.setupNode(
-//            color: color,
-//            position: position,
-//            heading: CGVector(dx: CGFloat.random(in: -5..<5), dy: CGFloat.random(in: -5..<5)))
-//        self.boids.append(boid)
-//        self.addChild(boid)
     }
     
     override func update(_ currentTime: TimeInterval) {
-        for boid in boids { boid.update(in: self.boids) }
+        for boid in boids {
+            boid.update(in: self.boids)
+            boid.position = updatePositionToAvoidBounds(currentPositon: boid.position + boid.velocity)
+        }
+    }
+
+    func updatePositionToAvoidBounds(currentPositon: CGPoint) -> CGPoint {
+        switch(!xRange.contains(currentPositon.x), !yRange.contains(currentPositon.y)) {
+        case (true, true):
+            return CGPoint(x: currentPositon.x * -1, y: currentPositon.y * -1)
+        case (true, false):
+            return CGPoint(x: currentPositon.x * -1, y: currentPositon.y)
+        case(false, true):
+            return CGPoint(x: currentPositon.x, y: currentPositon.y * -1)
+        case (false, false):
+            return currentPositon
+        }
     }
 }
 

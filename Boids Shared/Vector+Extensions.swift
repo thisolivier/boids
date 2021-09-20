@@ -12,3 +12,25 @@ extension CGVector {
         return ((self.dx * self.dx) + (self.dy * self.dy)).squareRoot()
     }
 }
+
+extension CGPoint {
+    var length: CGFloat {
+        return ((self.x * self.y) + (self.x * self.y)).squareRoot()
+    }
+
+    static func distanceBetween(_ first: CGPoint, and second: CGPoint) -> CGFloat {
+        CGFloat(hypotf(Float(second.x - first.x), Float(second.y - first.y)))
+    }
+}
+
+func *(lhs: CGPoint, rhs: CGFloat) -> CGPoint {
+    return CGPoint(x: lhs.x * rhs, y: lhs.y * rhs)
+}
+
+func /(lhs: CGPoint, rhs: CGFloat) -> CGPoint {
+    return CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
+}
+
+func +(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
+    return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+}
